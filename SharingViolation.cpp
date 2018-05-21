@@ -10,8 +10,7 @@
 
 	https:\/\/msdn.microsoft.com\/en-us\/library\/windows\/desktop\/aa363874(v=vs.85).aspx
 
-	After you read this site, You naturally know of "how to use this program"
-
+	After you read this site, You naturally know of "how to use this program" 
 */
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -338,7 +337,23 @@ void Explanation()
 	_tprintf(L"*************************************************************************************************\n\n");
 }
 
-void PrintOptions(){	_tprintf(L"********************************************** MENU **********************************************\n");	_tprintf(L"1: desired access -> GENERIC_READ,  shared access : FILE_SHARE_READ\n");	_tprintf(L"2: desired access -> GENERIC_READ,  shared access : FILE_SHARE_WRITE\n");	_tprintf(L"3: desired access -> GENERIC_READ,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");	_tprintf(L"4: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_READ\n");	_tprintf(L"5: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_WRITE\n");	_tprintf(L"6: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");	_tprintf(L"7: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_READ\n");	_tprintf(L"8: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_WRITE\n");	_tprintf(L"9: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");	_tprintf(L"*************************************************************************************************\n\n");}void PrintResult(PFileOpenFlags first_flags, PFileOpenFlags second_flags, int result)
+void PrintOptions()
+{
+	_tprintf(L"********************************************** MENU **********************************************\n");
+	_tprintf(L"1: desired access -> GENERIC_READ,  shared access : FILE_SHARE_READ\n");
+	_tprintf(L"2: desired access -> GENERIC_READ,  shared access : FILE_SHARE_WRITE\n");
+	_tprintf(L"3: desired access -> GENERIC_READ,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");
+	_tprintf(L"4: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_READ\n");
+	_tprintf(L"5: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_WRITE\n");
+	_tprintf(L"6: desired access -> GENERIC_WRITE,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");
+	_tprintf(L"7: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_READ\n");
+	_tprintf(L"8: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_WRITE\n");
+	_tprintf(L"9: desired access -> GENERIC_READ | GENERIC_WRITE,  shared access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");
+	_tprintf(L"*************************************************************************************************\n\n");
+}
+
+
+void PrintResult(PFileOpenFlags first_flags, PFileOpenFlags second_flags, int result)
 {
 	_tprintf(L"********************************************** RESULT **********************************************\n");
 	_tprintf(L"You Choosed Flags Below \n");
