@@ -1,124 +1,195 @@
+/**
+
+Purpose of Production:
+
+ For Understanding concept of DESKTOP on Windows Operating Sytem.
+ For Understanding concept of EVENT OBJECT on Windows Operating System.
+
+Program Introduction:
+
+ When you in a Black Screen Actually you are in another Desktop 
+ which I name "MyDesktop".
+ The Thread made in "MyDesktop" make a message, and after the time you input
+ The Main Thread set the event which makes Thread end and after Thread end
+ The Waiting Works of Main thread also ended. And the Desktop Goes to Originally
+
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <process.h>
 #include <Windows.h>
 #include <tchar.h>
-#define TEST_FILE L"c:\\test.txt"
-//__stdcall
-unsigned int _stdcall threadFunc(LPVOID lpParam)
+
+#define MY_DESKTOP TEXT("MyDesktop")
+#define MY_EVENT TEXT("My Event")
+#define VERSION TEXT("1.0")
+
+HANDLE hEvent = NULL;
+int bthread = 0;
+
+unsigned int _stdcall HiddenFunc(LPVOID lpParam)
 {
-	CreateFile(
-		
-		NULL,
-		NULL,
-		NULL,
-		NULL
+	/**
+		This is Working Thread which makes Message in BlackHole
+	*/
 
-	);
+	BOOL bRet = FALSE;
+	HDESK* hNewDesk = (HDESK*)lpParam;
+	bRet = SetThreadDesktop(*hNewDesk);
 
-	return;
+	if (FALSE == bRet)
+	{
+		perror("SetThreadDesktop on Thread Error\n");
+		exit(0);
+	}
+
+	while (WAIT_TIMEOUT == WaitForSingleObject(hEvent, 0))
+	{
+		MessageBox(NULL, TEXT("You are in BlackHole..."), TEXT("BlackHole"), MB_OK);
+		Sleep(1000);
+	}
+
+	return 0;
 
 }
-void GetFirstCallFlag(int choice, int* flag)
-{
-	
-
-}
-void GetSecondCallFlag(int choice, int* flag)
-
-{
-
-
-}
-
 
 int _tmain()
 {
-	HANDLE hThread;
-	HANDLE fHandle;
 
-	int FirstCallFlag;
-	int SecondCallFlag;
+	HDESK hNewDesk = NULL;
+	HDESK hOrgDesk = NULL;
+	HDESK hOrgInputDesk = NULL;
+	HANDLE hThread = NULL;
+	BOOL bRet = FALSE;
+	DWORD black_hole_time = 0;
+	
+	
+	_tprintf(L" *** This is the BlackHole Program ***\n");
+	_tprintf(L" VERSION %s mady by YoungJoon\n", VERSION);
+	_tprintf(L" This is Eductation For Windows Desktop Concept with Windows Event Object\n");
+	_tprintf(L" Enjoy :p\n");
 
-	int choice;
-	Explanation();
-
-	printf("=>");
-	scanf("%d", &choice);
-
-	GetFirstCallFlag(choice, &FirstCallFlag);
-
-	printf("choose the SHARED_ACCESS FLAG");
-	printf("=>");
-
-	scanf("%d", &choice);
-
-	GetSecondCallFlag(choice, &SecondCallFlag);
-
-	hThread = (HANDLE)_beginthreadex(NULL, 0, threadFunc, NULL, CREATE_SUSPENDED, NULL);
-	fHandle = CreateFile(TEST_FILE,
-			shareAccessFlag,
-			desiredAccessFlag,
-			NULL,
-			NULL,
-			NULL,
-			NULL
-			);
-
-	ResumeThread(hThread);	// Resume the suspended Thread
-	WaitForSingleObject(hThread, INFINITE);	// Thread Exit Waiting
+	_tprintf(L"Input the Blackhole Time\n");
+	_tprintf(L"DO NOT SO MUCH TIME YOU'LL BE IN TROUBLE)\n");
+	_tprintf(L"==>");
+	_tscanf(L"%d", &black_hole_time);
+	black_hole_time = black_hole_time * 1000;
 
 
-	if (fHandle != NULL)
-	{
-		CloseHandle(fHandle);
-	}
-		
+	/**
 
-	return 0;
-}
+	Remember!
 
-void Explanation()
-{
+	Signalled -> Green Light
+	Non-signalled -> Reg Light
 
-	// https://msdn.microsoft.com/en-us/library/windows/desktop/aa363874(v=vs.85).aspx
-	_tprintf(L"------------------------------------------------------\n");
-	_tprintf(L"This is for getting knowledge of the Sharing Violation\n");
-	_tprintf(L"------------------------------------------------------\n");
+	You can pass the WaitForSingleObject API on Signalled State, becuase it is green light
 
-	_tprintf(L"Choose the case of DESIRED ACCESS and SHARED ACCESS \n");
-
-	_tprintf(L"1. FIRST CALL -> desired access : GENERIC_READ , shared_access : FILE_SHARE_READ\n");
-	_tprintf(L"VALID SECOND CALL -> desired access : GENERIC_READ ,  shared_access : FILE_SRARE_READ\n");
-
-	_tprintf(L"2. FIRST CALL -> desired access : GENERIC_READ , shared_access : FILE_SHARE_WRITE\n");
-	_tprintf(L"VALID SECOND CALL -> desired access : GENERIC_READ,  shared_access : FILE_SRARE_READ\n");
-	_tprintf(L"VALID SECOND CALL2 ->  desired access : GENERIC_WRITE, shared_access : FILE_SHARE_READ | FILE_SHARE_WRITE\n");
-
-	_tprintf(L"3. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ | FILE_SHARE_WRITE\n");
-	//_tprintf(L"VALID SHARED_ACCESS : GENERIC_WRITE |  FILE_SHARE_READ\n");
-
-
-/*
-	_tprintf(L"4. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-
-	_tprintf(L"5. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-
-	_tprintf(L"6. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-
-	_tprintf(L"7. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-
-	_tprintf(L"8. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-	_tprintf(L"9. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
-	_tprintf(L"10. DESIRED_ACCESS : GENERIC_READ | FILE_SHARE_READ\n");
-	_tprintf(L"VALID SHARED_ACCESS : GENERIC_READ | FILE_SRARE_READ\n");
+	This is the Not Manually Reset Event and Default Signalled Event
 	*/
 
+	hEvent = CreateEvent(
+		NULL,
+		FALSE,
+		FALSE,
+		MY_EVENT
+	);
 
+	if (NULL == hEvent)
+	{
+		perror("CreateEvent Error\n");
+		exit(0);
+	}
+
+	// My Real Desktop 
+	hOrgInputDesk = OpenInputDesktop(
+			0, 
+			FALSE, 
+			DESKTOP_SWITCHDESKTOP);
+
+	if (NULL == hOrgInputDesk)
+	{
+		perror("OpenInputDesktop Error\n");
+		exit(0);
+	}
+
+	// This is the New Desktop
+	hNewDesk = CreateDesktop(
+		MY_DESKTOP,
+		NULL,
+		NULL,
+		0,
+		GENERIC_ALL,
+		NULL);
+	
+	if(NULL == hNewDesk)
+	{
+		perror("CreateDesktop Failed\n");
+		exit(0);
+	}
+
+	// Real Thread Desktop
+	hOrgDesk = GetThreadDesktop(GetCurrentThreadId());
+
+	if (NULL == hOrgDesk)
+	{
+		perror("GetThreadDesktop Faild\n");
+		_tprintf(L"error : %d", GetLastError());
+		exit(0);
+	}
+
+	// Start the Thread
+	hThread = (HANDLE)_beginthreadex(NULL, 0, HiddenFunc, &hNewDesk, CREATE_SUSPENDED, NULL);
+
+	if (NULL == hThread)
+	{
+		perror("Thread Made Error");
+		exit(0);
+	}
+
+	// Resume it
+	ResumeThread(hThread);
+	if (!SetThreadDesktop(hNewDesk))
+	{
+		perror("SetThreadDesktop Error\n");
+		exit(0);
+	}
+
+	// Switch into New Desktop (= BlackHole)
+	bRet = SwitchDesktop(hNewDesk);
+
+	if (FALSE == bRet)
+	{
+		perror("Switch to New Desktop Failed\n");
+		_tprintf(L" error : %d", GetLastError());
+		exit(0);
+	}
+	
+	// Sleep (you are in BlackHole)
+	Sleep(black_hole_time);
+
+	// Stop Thread Event
+	SetEvent(hEvent);
+
+	// Thread stopped and Wait also stop
+	WaitForSingleObject(hThread, INFINITE);
+
+	if (FALSE == bRet)
+	{
+		perror("Switch to Original Desktop Failed\n");
+		_tprintf(L"error : %d", GetLastError());
+		exit(0);
+	}
+
+	// Go to Original Desktop
+	bRet = SwitchDesktop(hOrgDesk);
+	SetThreadDesktop(hOrgDesk);
+
+	CloseDesktop(hOrgDesk);
+	CloseDesktop(hNewDesk);
+
+	_tprintf(L" I am alive :)\n\n");
+	return 0;
 }
